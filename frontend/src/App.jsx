@@ -45,14 +45,14 @@ function App() {
   };
 
   if (loading) {
-    return <div className="loading">Loading Athlete Performance Tracker...</div>;
+    return <div className="loading">Loading Athletes Performance Tracker...</div>;
   }
 
   return (
     <div className="app">
       <header className="app-header">
         <div className="header-top">
-          <h1>Athlete Performance Tracker</h1>
+          <h1>Athletes Performance Tracker</h1>
           <button 
             className="btn-refresh"
             onClick={fetchInitialData}
