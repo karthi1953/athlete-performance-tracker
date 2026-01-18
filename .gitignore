@@ -1,0 +1,27 @@
+# Backend .gitignore
+echo "node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+.idea/
+.vscode/" > backend/.gitignore
+
+# Frontend .gitignore  
+echo "node_modules/
+build/
+.env
+.DS_Store
+.idea/
+.vscode/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*" > frontend/.gitignore
+
+# Optional root .gitignore
+echo ".DS_Store
+.idea/
+.vscode/
+backend/.env
+frontend/.env" > .gitignore
