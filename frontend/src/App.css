@@ -1,3 +1,6 @@
+/* ==================== */
+/* RESET & BASE STYLES */
+/* ==================== */
 * {
   margin: 0;
   padding: 0;
@@ -10,14 +13,20 @@ body {
     sans-serif;
   background-color: #f5f5f5;
   color: #333;
+  min-width: 100vw;
+  overflow-x: hidden;
 }
 
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100vw;
 }
 
+/* ==================== */
+/* HEADER & NAVIGATION */
+/* ==================== */
 .app-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -27,6 +36,35 @@ body {
 
 .app-header h1 {
   margin-bottom: 1rem;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.btn-refresh {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .nav {
@@ -48,12 +86,16 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* ==================== */
+/* MAIN CONTENT LAYOUT */
+/* ==================== */
 .main-content {
   flex: 1;
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .loading {
@@ -65,6 +107,9 @@ body {
   color: #666;
 }
 
+/* ==================== */
+/* DASHBOARD */
+/* ==================== */
 .dashboard {
   display: flex;
   flex-direction: column;
@@ -121,6 +166,9 @@ body {
   background: #5a67d8;
 }
 
+/* ==================== */
+/* FOOTER */
+/* ==================== */
 .app-footer {
   background: #333;
   color: white;
@@ -129,28 +177,20 @@ body {
   margin-top: auto;
 }
 
-/* Basic responsive design */
-@media (max-width: 768px) {
-  .nav {
-    flex-wrap: wrap;
-  }
-  
-  .stats {
-    grid-template-columns: 1fr;
-  }
-  
-  .quick-actions {
-    flex-direction: column;
-  }
-}
-/* Add to App.css */
-
-/* Form Styles */
-.athlete-form {
+/* ==================== */
+/* FORM STYLES */
+/* ==================== */
+.athlete-form,
+.score-input,
+.add-test-form {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.form-container {
   margin-bottom: 2rem;
 }
 
@@ -181,6 +221,30 @@ body {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.checkbox-group {
+  margin: 1.5rem 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  color: #555;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
 .help-text {
   display: block;
   margin-top: 0.25rem;
@@ -188,16 +252,9 @@ body {
   font-size: 0.875rem;
 }
 
-.error-message {
-  background: #fee;
-  color: #c33;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  border: 1px solid #fcc;
-}
-
-/* Button Styles */
+/* ==================== */
+/* BUTTON STYLES */
+/* ==================== */
 .btn-primary {
   background: #667eea;
   color: white;
@@ -253,8 +310,59 @@ body {
   background: #c82333;
 }
 
-/* Athlete List Styles */
-.list-header {
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* ==================== */
+/* MESSAGE STYLES */
+/* ==================== */
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #fcc;
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #c3e6cb;
+}
+
+.warning-message {
+  background: #fff3cd;
+  color: #856404;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid #ffeaa7;
+}
+
+.warning-message h3 {
+  margin-top: 0;
+  color: #856404;
+}
+
+.warning-message ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+/* ==================== */
+/* TABLE STYLES */
+/* ==================== */
+.list-header,
+.manager-header,
+.scores-header,
+.leaderboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -294,6 +402,18 @@ tr:hover {
   background: #f8f9fa;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #666;
+}
+
+/* ==================== */
+/* ATHLETE LIST */
+/* ==================== */
 .role-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
@@ -311,91 +431,9 @@ tr:hover {
   color: #155724;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 3rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #666;
-}
-
-.form-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-}
-
-/* Quick actions update */
-.quick-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.quick-actions button {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.3s;
-}
-
-.quick-actions button:hover {
-  background: #5a67d8;
-}
-
-/* Form container */
-.form-container {
-  margin-bottom: 2rem;
-}
-/* Score Input Styles */
-.score-input {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.success-message {
-  background: #d4edda;
-  color: #155724;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  border: 1px solid #c3e6cb;
-}
-
-.warning-message {
-  background: #fff3cd;
-  color: #856404;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  border: 1px solid #ffeaa7;
-}
-
-.warning-message h3 {
-  margin-top: 0;
-  color: #856404;
-}
-
-.warning-message ul {
-  margin: 0.5rem 0;
-  padding-left: 1.5rem;
-}
-
+/* ==================== */
+/* SCORE INPUT */
+/* ==================== */
 .unit-display {
   margin-left: 0.5rem;
   color: #666;
@@ -409,13 +447,6 @@ tr:hover {
 .score-help small {
   color: #e74c3c;
   font-style: italic;
-}
-
-.scores-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
 }
 
 .scores-info {
@@ -440,7 +471,7 @@ tr:hover {
   margin-bottom: 0.25rem;
 }
 
-/* Recent Scores Preview */
+/* Recent Scores */
 .recent-scores {
   margin-top: 2rem;
   padding-top: 1.5rem;
@@ -485,7 +516,6 @@ tr:hover {
   margin-left: auto;
 }
 
-/* Form input specific styles */
 input[type="number"] {
   font-family: monospace;
 }
@@ -494,40 +524,13 @@ select {
   cursor: pointer;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .scores-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .recent-scores li {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-  
-  .score-time {
-    margin-left: 0;
-  }
-}
-/* Test Manager Styles */
+/* ==================== */
+/* TEST MANAGER */
+/* ==================== */
 .test-manager {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-}
-
-.manager-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
 }
 
 .quick-setup {
@@ -581,30 +584,6 @@ select {
 
 .common-test-btn:hover:not(:disabled) small {
   color: rgba(255, 255, 255, 0.9);
-}
-
-.add-test-form {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.checkbox-group {
-  margin: 1.5rem 0;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-weight: 600;
-  color: #555;
-}
-
-.checkbox-label input[type="checkbox"] {
-  margin-right: 0.5rem;
-  width: auto;
 }
 
 .unit-badge {
@@ -678,56 +657,19 @@ select {
   color: #4a5568;
 }
 
-/* Update existing styles for consistency */
 .tests-view {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #666;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .manager-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .common-tests {
-    flex-direction: column;
-  }
-  
-  .common-test-btn {
-    min-width: auto;
-  }
-  
-  .examples-grid {
-    grid-template-columns: 1fr;
-  }
-}
-/* Leaderboard Styles */
+/* ==================== */
+/* LEADERBOARD */
+/* ==================== */
 .leaderboard {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
-
-.leaderboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .leaderboard-actions {
@@ -736,7 +678,9 @@ select {
   flex-wrap: wrap;
 }
 
-.loading-state, .error-state, .empty-leaderboard {
+.loading-state,
+.error-state,
+.empty-leaderboard {
   text-align: center;
   padding: 3rem;
   background: white;
@@ -744,7 +688,8 @@ select {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.error-state h3, .empty-leaderboard h3 {
+.error-state h3,
+.empty-leaderboard h3 {
   color: #e74c3c;
   margin-top: 0;
 }
@@ -764,7 +709,7 @@ select {
   100% { transform: rotate(360deg); }
 }
 
-/* Filters Section */
+/* Filters */
 .filters-section {
   background: white;
   padding: 1.5rem;
@@ -793,7 +738,7 @@ select {
   border-left: 4px solid #3498db;
 }
 
-/* Stats Section */
+/* Stats */
 .leaderboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -857,7 +802,7 @@ select {
   background: #f8f9fa;
 }
 
-/* Special styling for top ranks */
+/* Ranks */
 .rank-1 {
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
 }
@@ -870,11 +815,12 @@ select {
   background: linear-gradient(135deg, rgba(205, 127, 50, 0.1) 0%, rgba(205, 127, 50, 0.05) 100%);
 }
 
-.rank-1:hover, .rank-2:hover, .rank-3:hover {
+.rank-1:hover,
+.rank-2:hover,
+.rank-3:hover {
   background: #f8f9fa;
 }
 
-/* Cell Styles */
 .rank-cell {
   width: 80px;
   text-align: center;
@@ -904,6 +850,7 @@ select {
   background: linear-gradient(135deg, #CD7F32 0%, #A0522D 100%);
 }
 
+/* Athlete Cell */
 .athlete-cell {
   min-width: 200px;
 }
@@ -920,6 +867,7 @@ select {
   margin-top: 0.25rem;
 }
 
+/* Points Cell */
 .points-cell {
   min-width: 150px;
 }
@@ -945,6 +893,7 @@ select {
   transition: width 0.3s ease;
 }
 
+/* Badges */
 .badge-cell {
   width: 120px;
 }
@@ -1105,27 +1054,238 @@ select {
   margin-top: 0.75rem;
 }
 
-/* Responsive Design */
+/* ==================== */
+/* MOBILE RESPONSIVE STYLES */
+/* ==================== */
 @media (max-width: 768px) {
-  .leaderboard-header {
-    flex-direction: column;
-    align-items: stretch;
+  /* Global adjustments */
+  body {
+    min-width: 100vw;
+    overflow-x: hidden;
   }
   
-  .leaderboard-actions {
-    justify-content: center;
+  .app {
+    width: 100vw;
+    min-width: 100vw;
+    display: block;
+  }
+  
+  /* Header & Navigation */
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+  
+  .nav {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
+  }
+  
+  .nav button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  
+  /* Main content */
+  .main-content {
+    width: 100vw;
+    min-width: 100vw;
+    padding: 1rem;
+    margin: 0;
+  }
+  
+  /* Views */
+  .dashboard,
+  .athletes-view,
+  .tests-view,
+  .scores-view,
+  .leaderboard-view {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  h2, h3, h4 {
+    font-size: 1.25rem;
+  }
+  
+  /* Dashboard */
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .quick-actions button {
+    width: 100%;
+  }
+  
+  /* Forms */
+  .athlete-form,
+  .score-input,
+  .add-test-form,
+  .filters-section {
+    padding: 1rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions,
+  .leaderboard-actions,
+  .filter-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-actions button,
+  .leaderboard-actions button,
+  .filter-actions button {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+  
+  /* Tables - Convert to cards on mobile */
+  .table-container {
+    overflow-x: visible !important;
+    width: 100%;
+  }
+  
+  table {
+    display: block;
+    width: 100% !important;
+  }
+  
+  thead {
+    display: none;
+  }
+  
+  tbody {
+    display: block;
+    width: 100%;
+  }
+  
+  tr {
+    display: block;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  td {
+    display: block;
+    width: 100% !important;
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+  
+  td:last-child {
+    border-bottom: none;
+    padding-top: 1rem;
+  }
+  
+  /* Add labels to table cells */
+  td:nth-child(1)::before {
+    content: "Name: ";
+    font-weight: bold;
+    color: #555;
+    display: inline;
+    margin-right: 0.5rem;
+  }
+  
+  td:nth-child(2)::before {
+    content: "Role: ";
+    font-weight: bold;
+    color: #555;
+    display: inline;
+    margin-right: 0.5rem;
+  }
+  
+  td:nth-child(3)::before {
+    content: "Joined: ";
+    font-weight: bold;
+    color: #555;
+    display: inline;
+    margin-right: 0.5rem;
+  }
+  
+  /* Action buttons in tables */
+  td:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  td:last-child button {
+    width: 100%;
+    margin: 0;
+  }
+  
+  /* Remove pseudo elements for action cells */
+  td:last-child::before {
+    content: none;
+  }
+  
+  /* Test Manager */
+  .manager-header,
+  .leaderboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .common-tests {
+    flex-direction: column;
+  }
+  
+  .common-test-btn {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .examples-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Leaderboard */
+  .leaderboard-stats {
+    grid-template-columns: 1fr;
   }
   
   .date-filters {
     grid-template-columns: 1fr;
-  }
-  
-  .filter-actions {
-    justify-content: center;
-  }
-  
-  .leaderboard-table {
-    font-size: 0.875rem;
   }
   
   .leaderboard-table th,
@@ -1133,7 +1293,10 @@ select {
     padding: 0.5rem;
   }
   
-  .athlete-cell {
+  .athlete-cell,
+  .points-cell,
+  .badge-cell,
+  .details-cell {
     min-width: auto;
   }
   
@@ -1148,43 +1311,353 @@ select {
   .legend-items {
     grid-template-columns: 1fr;
   }
-}
-
-@media (max-width: 480px) {
-  .leaderboard-actions {
+  
+  /* Recent Scores */
+  .recent-scores li {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
   
-  .leaderboard-actions button {
-    width: 100%;
+  .score-time {
+    margin-left: 0;
+  }
+  
+  /* Touch device optimizations */
+  button,
+  .nav button,
+  .btn-primary,
+  .btn-secondary,
+  .btn-small {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input,
+  select {
+    min-height: 44px;
+    font-size: 16px;
   }
 }
-/* Add to App.css */
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+
+/* ==================== */
+/* TABLET RESPONSIVE STYLES */
+/* ==================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .form-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .common-tests {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .examples-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .leaderboard-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  table {
+    font-size: 0.9rem;
+  }
+  
+  th, td {
+    padding: 0.75rem;
+  }
 }
 
-.btn-refresh {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* ==================== */
+/* LEADERBOARD MOBILE CARD FIX */
+/* ==================== */
+@media (max-width: 768px) {
+  /* Hide the desktop table on mobile */
+  .leaderboard-table {
+    display: none !important;
+  }
+  
+  /* Show mobile cards */
+  .mobile-leaderboard {
+    display: block;
+    width: 100%;
+  }
+  
+  /* Leaderboard Card Styling */
+  .leaderboard-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-sizing: border-box;
+  }
+  
+  /* Rank Column */
+  .card-rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+    flex-shrink: 0;
+  }
+  
+  .rank-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .rank-circle.gold {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  }
+  
+  .rank-circle.silver {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A9A9A9 100%);
+  }
+  
+  .rank-circle.bronze {
+    background: linear-gradient(135deg, #CD7F32 0%, #A0522D 100%);
+  }
+  
+  .rank-circle.other {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  /* Athlete Info Column - FIXED WIDTH ISSUE */
+  .card-athlete {
+    flex: 1;
+    min-width: 0; /* CRITICAL: Allows text to truncate */
+    overflow: hidden;
+  }
+  
+  .card-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2d3748;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+  
+  .card-tests {
+    font-size: 0.75rem;
+    color: #718096;
+    display: block;
+  }
+  
+  /* Points Column */
+  .card-points {
+    min-width: 80px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  
+  .card-score {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 0.25rem;
+  }
+  
+  .card-label {
+    font-size: 0.75rem;
+    color: #718096;
+    display: block;
+  }
+  
+  /* Badge styling */
+  .card-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  
+  /* For very small screens */
+  @media (max-width: 480px) {
+    .leaderboard-card {
+      padding: 0.75rem;
+      gap: 0.5rem;
+    }
+    
+    .rank-circle {
+      width: 32px;
+      height: 32px;
+      font-size: 0.875rem;
+    }
+    
+    .card-name {
+      font-size: 0.9rem;
+    }
+    
+    .card-points {
+      min-width: 60px;
+    }
+    
+    .card-score {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .athlete-list table,
+  .tests-list table {
+    display: none !important;
+  }
+  
+  .athlete-list .mobile-only,
+  .tests-list .mobile-only {
+    display: block;
+  }
 }
 
-.btn-refresh:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.3);
+
+@media (min-width: 769px) {
+  .mobile-leaderboard {
+    display: none !important;
+  }
+  
+  .leaderboard-table {
+    display: table !important;
+  }
+}
+/* MOBILE TEST DETAILS STYLES */
+@media (max-width: 768px) {
+  /* Test details section in mobile cards */
+  .card-details {
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .card-details-header {
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-details-header small {
+    font-weight: 600;
+    color: #667eea;
+  }
+  
+  .card-tests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .card-test-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .card-test-name {
+    font-weight: 600;
+    color: #4a5568;
+    flex: 2;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .card-test-value {
+    color: #2d3748;
+    font-family: monospace;
+    flex: 1;
+    text-align: center;
+    margin: 0 0.5rem;
+  }
+  
+  .card-test-points {
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+  
+  .card-test-points.excellent {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .card-test-points.good {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+  
+  .card-test-points.average {
+    background: #fff3cd;
+    color: #856404;
+  }
+  
+  .card-test-points.poor {
+    background: #f8d7da;
+    color: #721c24;
+  }
+  
+  /* When showing details, adjust card layout */
+  .leaderboard-card.has-details {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+  
+  .leaderboard-card.has-details .card-athlete {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .leaderboard-card.has-details .card-points {
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
 }
 
-.btn-refresh:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* For very small screens */
+@media (max-width: 480px) {
+  .card-test-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .card-test-name,
+  .card-test-value,
+  .card-test-points {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .card-test-value {
+    margin: 0;
+  }
 }

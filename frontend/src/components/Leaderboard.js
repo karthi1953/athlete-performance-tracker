@@ -12,7 +12,6 @@ function Leaderboard() {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState('summary'); // 'summary' or 'detailed'
 
-  // Fetch leaderboard on component mount
   useEffect(() => {
     fetchLeaderboard();
   }, []);
@@ -214,7 +213,7 @@ function Leaderboard() {
         </div>
       </div>
 
-      {/* Leaderboard Table */}
+      {/* Leaderboard Content */}
       {leaderboard.length === 0 ? (
         <div className="empty-leaderboard">
           <h3>No Scores Recorded Yet</h3>
@@ -228,7 +227,8 @@ function Leaderboard() {
         </div>
       ) : (
         <>
-          <div className="table-container">
+          {/* Desktop Table */}
+          <div className="table-container desktop-only">
             <table className="leaderboard-table">
               <thead>
                 <tr>
@@ -296,6 +296,71 @@ function Leaderboard() {
                 })}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="mobile-leaderboard mobile-only">
+            {leaderboard.map((athlete) => {
+              const rankClass = athlete.rank === 1 ? 'gold' : 
+                              athlete.rank === 2 ? 'silver' : 
+                              athlete.rank === 3 ? 'bronze' : 'other';
+              
+              const badgeEmoji = athlete.rank === 1 ? '🥇' : 
+                                athlete.rank === 2 ? '🥈' : 
+                                athlete.rank === 3 ? '🥉' : '🏅';
+              
+              return (
+                <div key={athlete.athleteId || athlete._id} className="leaderboard-card">
+                  {/* Rank Column */}
+                  <div className="card-rank">
+                    <div className={`rank-circle ${rankClass}`}>
+                      {athlete.rank}
+                    </div>
+                    <span className="card-badge">
+                      {badgeEmoji}
+                    </span>
+                  </div>
+                  
+                  {/* Athlete Info Column */}
+                  <div className="card-athlete">
+                    <span className="card-name">{athlete.name}</span>
+                    {viewMode === 'detailed' && athlete.testDetails && (
+                      <small className="card-tests">
+                        {athlete.testDetails.length} tests
+                      </small>
+                    )}
+                  </div>
+                  
+                  {/* Points Column */}
+                  <div className="card-points">
+                    <div className="card-score">{athlete.totalPoints.toFixed(1)}</div>
+                    <small className="card-label">points</small>
+                  </div>
+                  
+                  {/* Test Details - Show when in detailed view mode */}
+                  {viewMode === 'detailed' && athlete.testDetails && (
+                    <div className="card-details">
+                      <div className="card-details-header">
+                        <small>Test Breakdown:</small>
+                      </div>
+                      <div className="card-tests-list">
+                        {athlete.testDetails.map((test, index) => (
+                          <div key={index} className="card-test-item">
+                            <div className="card-test-name">{test.testName}</div>
+                            <div className="card-test-value">
+                              {test.rawValue} {test.unit}
+                            </div>
+                            <div className={`card-test-points ${getPerformanceColor(test.points)}`}>
+                              {test.points.toFixed(1)} pts
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Legend */}
