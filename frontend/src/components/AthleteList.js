@@ -1,172 +1,151 @@
 import React, { useState } from 'react';
-import { athleteAPI } from '../services/api';
-import AthleteForm from './AthleteForm';
-function AthleteList({ athletes: initialAthletes, onAthletesUpdated }) {
-  const [athletes, setAthletes] = useState(initialAthletes);
-  const [showForm, setShowForm] = useState(false);
-  const [editingAthlete, setEditingAthlete] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleAthleteAdded = (newAthlete) => {
-    setAthletes(prev => [...prev, newAthlete]);
-    setShowForm(false);
-    if (onAthletesUpdated) {
-      onAthletesUpdated([...athletes, newAthlete]);
-    }
+const AthleteList = ({ athletes, onDelete, onEdit, onAthletesUpdated }) => {
+  const [roleFilter, setRoleFilter] = useState('all');
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
-const handleDelete = async (id) => {
-  if (!window.confirm('Are you sure you want to delete this athlete? All their scores will also be deleted.')) {
-    return;
-  }
+  // Filter athletes based on role only (search removed)
+  const filteredAthletes = athletes.filter(athlete => {
+    const matchesRole = roleFilter === 'all' || athlete.role === roleFilter;
+    return matchesRole;
+  });
 
-  setLoading(true);
-  try {
-    const response = await athleteAPI.delete(id);
-    
-    const updatedAthletes = athletes.filter(athlete => athlete._id !== id);
-    setAthletes(updatedAthletes);
-    
-    if (onAthletesUpdated) {
-      onAthletesUpdated(updatedAthletes);
-    }
-    
-    alert('Athlete deleted successfully!');
-    
-  } catch (error) {
-    console.error('Delete error details:', error);
-    
-    // error handling
-    let errorMessage = 'Failed to delete athlete';
-    
-    if (error.response) {
-      errorMessage = error.response.data?.error || `Server error: ${error.response.status}`;
-    } else if (error.request) {
-      errorMessage = 'No response from server. Please check if the backend is running.';
-    } else {
-      errorMessage = error.message;
-    }
-    
-    alert(`Error: ${errorMessage}`);
-    
-    // Re-fetch athletes to ensure UI is in sync
-    try {
-      const freshResponse = await athleteAPI.getAll();
-      setAthletes(freshResponse.data);
-      if (onAthletesUpdated) {
-        onAthletesUpdated(freshResponse.data);
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this athlete?')) {
+      if (onDelete && typeof onDelete === 'function') {
+        onDelete(id);
+      } else {
+        console.error('onDelete is not a function');
       }
-    } catch (fetchError) {
-      console.error('Failed to refresh athletes:', fetchError);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleEdit = (athlete) => {
-    setEditingAthlete(athlete);
-  };
-
-  const handleUpdate = async (updatedAthlete) => {
-    try {
-      const response = await athleteAPI.update(updatedAthlete._id, updatedAthlete);
-      const updatedAthletes = athletes.map(a => 
-        a._id === updatedAthlete._id ? response.data : a
-      );
-      setAthletes(updatedAthletes);
-      setEditingAthlete(null);
-      if (onAthletesUpdated) {
-        onAthletesUpdated(updatedAthletes);
-      }
-    } catch (error) {
-      alert('Failed to update athlete: ' + (error.response?.data?.error || error.message));
+    if (onEdit && typeof onEdit === 'function') {
+      onEdit(athlete);
+    } else {
+      console.error('onEdit is not a function');
     }
   };
 
-  if (editingAthlete) {
-    return (
-      <div className="edit-athlete-form">
-        <h3>Edit Athlete</h3>
-        <AthleteForm 
-          initialData={editingAthlete}
-          onAthleteAdded={handleUpdate}
-          onCancel={() => setEditingAthlete(null)}
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className="athlete-list">
+    <div className="athletes-view">
       <div className="list-header">
-        <h3>Athletes ({athletes.length})</h3>
-        <button 
-          className="btn-primary"
-          onClick={() => setShowForm(!showForm)}
-          disabled={loading}
-        >
-          {showForm ? 'Cancel' : '+ Add Athlete'}
-        </button>
+
       </div>
 
-      {showForm && (
-        <div className="form-container">
-          <AthleteForm onAthleteAdded={handleAthleteAdded} />
-        </div>
-      )}
-
-      {athletes.length === 0 ? (
+      {filteredAthletes.length === 0 ? (
         <div className="empty-state">
-          <p>No athletes yet. Add your first athlete to get started!</p>
+          <p>No athletes found.</p>
         </div>
       ) : (
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Joined</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {athletes.map(athlete => (
-                <tr key={athlete._id}>
-                  <td>{athlete.name}</td>
-                  <td>
-                    <span className={`role-badge ${athlete.role}`}>
-                      {athlete.role}
-                    </span>
-                  </td>
-                  <td>
-                    {new Date(athlete.createdAt).toLocaleDateString()}
-                  </td>
-                  <td>
-                    <button 
-                      className="btn-small"
-                      onClick={() => handleEdit(athlete)}
-                      disabled={loading}
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      className="btn-small btn-danger"
-                      onClick={() => handleDelete(athlete._id)}
-                      disabled={loading}
-                    >
-                      Delete
-                    </button>
-                  </td>
+        <>
+          {/* Desktop table view */}
+          <div className="table-container">
+            <table className="athlete-list">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Athlete ID</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filteredAthletes.map((athlete) => (
+                  <tr key={athlete._id || athlete.id}>
+                    <td>
+                      <div className="athlete-name">{athlete.name}</div>
+                    </td>
+                    <td>
+                      <span className={`role-badge ${athlete.role}`}>
+                        {athlete.role.charAt(0).toUpperCase() + athlete.role.slice(1)}
+                      </span>
+                    </td>
+                    <td>
+                      <code className="athlete-id">{(athlete._id || athlete.id || '').substring(0, 8)}...</code>
+                    </td>
+                    <td>
+                      {formatDate(athlete.createdAt)}
+                    </td>
+                    <td>
+                      <div className="action-buttons">
+                        <button 
+                          className="btn-small btn-edit" 
+                          onClick={() => handleEdit(athlete)}
+                          title="Edit athlete"
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn-small btn-danger" 
+                          onClick={() => handleDelete(athlete._id || athlete.id)}
+                          title="Delete athlete"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile card view */}
+          <div className="mobile-athletes-list">
+            {filteredAthletes.map((athlete) => (
+              <div key={athlete._id || athlete.id} className="athlete-card">
+                <div className="athlete-card-info">
+                  <div className="athlete-card-header">
+                    <div className="athlete-card-name">{athlete.name}</div>
+                    <span className={`athlete-card-role ${athlete.role}`}>
+                      {athlete.role.charAt(0).toUpperCase() + athlete.role.slice(1)}
+                    </span>
+                  </div>
+                  <div className="athlete-card-details">
+                    <span className="athlete-card-id">
+                      <strong>ID:</strong> {(athlete._id || athlete.id || '').substring(0, 12)}...
+                    </span>
+                    <span className="athlete-card-date">
+                      <strong>Joined:</strong> {formatDate(athlete.createdAt)}
+                    </span>
+                  </div>
+                </div>
+                <div className="athlete-card-actions">
+                  <button 
+                    className="btn-small btn-edit" 
+                    onClick={() => handleEdit(athlete)}
+                    title="Edit athlete"
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    className="btn-small btn-danger" 
+                    onClick={() => handleDelete(athlete._id || athlete.id)}
+                    title="Delete athlete"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
-}
+};
 
 export default AthleteList;

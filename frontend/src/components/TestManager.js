@@ -111,10 +111,20 @@ function TestManager({ onTestsUpdated }) {
     setFormData(test);
   };
 
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   return (
     <div className="test-manager">
       <div className="manager-header">
-        <h3>Test Types Management</h3>
         <button 
           className="btn-secondary"
           onClick={fetchTests}
@@ -220,48 +230,89 @@ function TestManager({ onTestsUpdated }) {
             <p>No test types created yet. Add your first test above.</p>
           </div>
         ) : (
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Test Name</th>
-                  <th>Unit</th>
-                  <th>Scoring</th>
-                  <th>Created</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tests.map(test => (
-                  <tr key={test._id}>
-                    <td>
-                      <strong>{test.testName}</strong>
-                    </td>
-                    <td>
-                      <span className="unit-badge">{test.unit}</span>
-                    </td>
-                    <td>
-                      <span className={`scoring-badge ${test.higherIsBetter ? 'higher-better' : 'lower-better'}`}>
-                        {test.higherIsBetter ? '↑ Higher Better' : '↓ Lower Better'}
-                      </span>
-                    </td>
-                    <td>
-                      {new Date(test.createdAt).toLocaleDateString()}
-                    </td>
-                    <td>
-                      <button 
-                        className="btn-small btn-danger"
-                        onClick={() => handleDelete(test._id)}
-                        disabled={loading}
-                      >
-                        Delete
-                      </button>
-                    </td>
+          <>
+            {/* Desktop table view */}
+            <div className="table-container">
+              <table className="tests-view">
+                <thead>
+                  <tr>
+                    <th>Test Name</th>
+                    <th>Unit</th>
+                    <th>Scoring</th>
+                    <th>Created</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {tests.map(test => (
+                    <tr key={test._id}>
+                      <td>
+                        <strong>{test.testName}</strong>
+                      </td>
+                      <td>
+                        <span className="unit-badge">{test.unit}</span>
+                      </td>
+                      <td>
+                        <span className={`scoring-badge ${test.higherIsBetter ? 'higher-better' : 'lower-better'}`}>
+                          {test.higherIsBetter ? '↑ Higher Better' : '↓ Lower Better'}
+                        </span>
+                      </td>
+                      <td>
+                        {formatDate(test.createdAt)}
+                      </td>
+                      <td>
+                        <button 
+                          className="btn-small btn-danger"
+                          onClick={() => handleDelete(test._id)}
+                          disabled={loading}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile card view */}
+            <div className="mobile-tests-list">
+              {tests.map(test => (
+                <div key={test._id} className="test-card">
+                  <div className="test-card-header">
+                    <div>
+                      <div className="test-card-name">{test.testName}</div>
+                      <div className="test-card-unit">Unit: {test.unit}</div>
+                      <div className="test-card-id">ID: {test._id.substring(0, 8)}...</div>
+                    </div>
+                    <div className="test-card-badges">
+                      <span className={`test-card-badge ${test.higherIsBetter ? 'higher-better' : 'lower-better'}`}>
+                        {test.higherIsBetter ? 'Higher Better' : 'Lower Better'}
+                      </span>
+                      <span className="test-card-badge active">
+                        Active
+                      </span>
+                    </div>
+                  </div>
+                  <div className="test-card-details">
+                    <div className="test-card-detail">
+                      <span className="test-card-label">Created:</span>
+                      <span className="test-card-value">{formatDate(test.createdAt)}</span>
+                    </div>
+                  </div>
+                  <div className="test-card-actions">
+                    <button 
+                      className="btn-small btn-danger"
+                      onClick={() => handleDelete(test._id)}
+                      disabled={loading}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 

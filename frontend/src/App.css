@@ -1661,3 +1661,244 @@ select {
     margin: 0;
   }
 }
+/* ==================== */
+/* ATHLETES MOBILE CARD STYLES */
+/* ==================== */
+@media (max-width: 768px) {
+  .athletes-view table,
+  .tests-view table {
+    display: none !important;
+  }
+  
+  .mobile-athletes-list,
+  .mobile-tests-list {
+    display: block !important;
+    width: 100%;
+  }
+  
+  /* Athlete Card Styling */
+  .athlete-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    box-sizing: border-box;
+  }
+  
+  /* Athlete Info */
+  .athlete-card-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  
+  .athlete-card-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2d3748;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  
+  .athlete-card-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .athlete-card-role {
+    padding: 0.125rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+  
+  .athlete-card-role.coach {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+  
+  .athlete-card-role.viewer {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .athlete-card-role.athlete {
+    background: #e2e8f0;
+    color: #4a5568;
+  }
+  
+  .athlete-card-id {
+    font-size: 0.75rem;
+    color: #718096;
+    display: inline-block;
+  }
+  
+  .athlete-card-date {
+    font-size: 0.75rem;
+    color: #a0aec0;
+  }
+  
+  /* Athlete Actions */
+  .athlete-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .athlete-card-actions button {
+    min-height: 36px;
+    min-width: 36px;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Test Card Styling */
+  .test-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .test-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+  
+  .test-card-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2d3748;
+    margin-bottom: 0.25rem;
+  }
+  
+  .test-card-unit {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-bottom: 0.25rem;
+  }
+  
+  .test-card-id {
+    font-size: 0.7rem;
+    color: #a0aec0;
+  }
+  
+  .test-card-badges {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .test-card-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  
+  .test-card-scoring {
+    background: #e2e8f0;
+    color: #4a5568;
+  }
+  
+  .test-card-status {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .test-card-details {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .test-card-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+  }
+  
+  .test-card-label {
+    color: #718096;
+  }
+  
+  .test-card-value {
+    color: #2d3748;
+    font-weight: 500;
+  }
+  
+  .test-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .test-card-actions button {
+    flex: 1;
+    min-height: 36px;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ==================== */
+/* SHOW/HIDE FOR DESKTOP */
+/* ==================== */
+@media (min-width: 769px) {
+  .mobile-athletes-list,
+  .mobile-tests-list,
+  .mobile-leaderboard {
+    display: none !important;
+  }
+  
+  .athletes-view table,
+  .tests-view table,
+  .leaderboard-table {
+    display: table !important;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+  .athlete-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .athlete-card-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .athlete-card-actions button {
+    flex: 1;
+  }
+  
+  .test-card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .test-card-badges {
+    flex-wrap: wrap;
+  }
+}

@@ -1,14 +1,31 @@
 // frontend/src/components/AthleteForm.js
-import React, { useState } from 'react';
-import { athleteAPI } from '../services/api';
+import React, { useState, useEffect } from 'react';
 
-function AthleteForm({ onAthleteAdded, onCancel }) {
+function AthleteForm({ athlete, onSubmit, onCancel }) {
+  // Initialize with empty form
   const [formData, setFormData] = useState({
     name: '',
     role: 'viewer'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Reset form when athlete prop changes
+  useEffect(() => {
+    if (athlete) {
+      console.log('Setting form data for athlete:', athlete._id || athlete.id, athlete.name);
+      setFormData({
+        name: athlete.name || '',
+        role: athlete.role || 'viewer'
+      });
+    } else {
+      // Reset to empty for new athlete
+      setFormData({
+        name: '',
+        role: 'viewer'
+      });
+    }
+  }, [athlete]); // Reset when athlete prop changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,21 +48,13 @@ function AthleteForm({ onAthleteAdded, onCancel }) {
     setError('');
 
     try {
-      const response = await athleteAPI.create(formData);
-      
-      // Clear form
-      setFormData({
-        name: '',
-        role: 'viewer'
-      });
-      
-      // Notify parent
-      if (onAthleteAdded) {
-        onAthleteAdded(response.data);
+      // Pass formData to parent component
+      if (onSubmit) {
+        await onSubmit(formData);
       }
       
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to create athlete');
+      setError(err.response?.data?.error || 'Failed to save athlete');
     } finally {
       setLoading(false);
     }
@@ -53,7 +62,6 @@ function AthleteForm({ onAthleteAdded, onCancel }) {
 
   return (
     <div className="athlete-form">
-      <h3>{onCancel ? 'Edit Athlete' : 'Add New Athlete'}</h3>
       
       {error && <div className="error-message">{error}</div>}
       
@@ -95,7 +103,7 @@ function AthleteForm({ onAthleteAdded, onCancel }) {
             className="btn-primary"
             disabled={loading || !formData.name.trim()}
           >
-            {loading ? 'Saving...' : (onCancel ? 'Update' : 'Add Athlete')}
+            {loading ? 'Saving...' : (athlete ? 'Update Athlete' : 'Add Athlete')}
           </button>
           
           {onCancel && (
